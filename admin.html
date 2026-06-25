@@ -92,9 +92,9 @@ input:focus{border-color:var(--river);}
   // E TAMBÉM na política SQL do Supabase (veja o README).
   // ============================================================
   const CONFIG = {
-   'supabaseUrl: "https://xmwokmzhjabqulclnuiz.supabase.co",
+   supabaseUrl: "https://xmwokmzhjabqulclnuiz.supabase.co",
     supabaseAnonKey: "COLE_AQUI_A_CHAVE_PUBLISHABLE_COMPLETA",
-    adminEmails: ["ricardocontreras19988@gmail.com"]
+    adminEmails: ["ricardocontreras19988@gmail.com"]};
   const ready = CONFIG.supabaseUrl.startsWith('http') && CONFIG.supabaseAnonKey.length > 20;
   if (!ready){
     document.body.innerHTML = '<div class="wrap"><h1>Painel não configurado</h1><p class="sub">Preencha CONFIG.supabaseUrl e CONFIG.supabaseAnonKey neste arquivo (admin.html), igual já fez no index.html.</p></div>';
