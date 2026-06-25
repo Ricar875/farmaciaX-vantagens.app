@@ -1,7 +1,612 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<meta charset="UTF-8"><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clube de Vantagens — Sua Marca</title>
+<meta name="description" content="Descontos reais em parceiros locais do Vale do São Francisco e Paulo Afonso.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#0B1F3A;--navy-2:#142D52;--gold:#C9A227;--gold-soft:#E4C766;--coral:#FF6B4A;--river:#178A8A;--cream:#FAF7F1;--ink:#13161B;--ink-soft:#5B6472;--line:#E7E1D6;--radius:20px;--display:'Sora',sans-serif;--body:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:var(--body);color:var(--ink);background:var(--cream);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+img,svg{display:block;}a{color:inherit;text-decoration:none;}button{font-family:inherit;cursor:pointer;border:none;background:none;}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px;}<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel — Clube de Vantagens</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0B1F3A;--coral:#FF6B4A;--river:#178A8A;--cream:#FAF7F1;--ink:#13161B;--soft:#5B6472;--line:#E7E1D6;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;}
+.wrap{max-width:640px;margin:0 auto;padding:30px 20px 60px;}
+h1{font-family:'Sora',sans-serif;font-weight:800;color:var(--navy);font-size:1.4rem;margin-bottom:4px;}
+.sub{color:var(--soft);font-size:.85rem;margin-bottom:28px;}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px;}
+label{font-size:.8rem;font-weight:600;color:var(--soft);display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+input,select{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.95rem;font-family:'Inter',sans-serif;outline:none;width:100%;}
+input:focus,select:focus{border-color:var(--river);}
+.btn{font-family:'Sora',sans-serif;font-weight:700;font-size:.85rem;padding:11px 18px;border-radius:999px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.btn-dark{background:var(--navy);color:#fff;}
+.btn-coral{background:var(--coral);color:#fff;}
+.btn-outline{background:transparent;border:1.5px solid var(--line);color:var(--ink);}
+.btn-danger{background:#fff;color:var(--coral);border:1.5px solid var(--coral);font-size:.78rem;padding:7px 14px;border-radius:999px;cursor:pointer;font-family:'Sora',sans-serif;font-weight:700;}
+.error{color:var(--coral);font-size:.82rem;margin-top:-4px;margin-bottom:8px;min-height:1em;}
+.partner-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px solid var(--line);padding:14px 0;}
+.partner-row:last-child{border-bottom:none;}
+.partner-row .info strong{display:block;font-family:'Sora',sans-serif;color:var(--navy);font-size:.95rem;}
+.partner-row .info span{font-size:.78rem;color:var(--river);font-weight:600;text-transform:uppercase;}
+.partner-row .info p{font-size:.82rem;color:var(--soft);margin-top:4px;}
+.tag{display:inline-block;background:var(--coral);color:#fff;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:4px;}
+#loginView,#adminView{display:none;}
+#loginView.active,#adminView.active{display:block;}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+.logo{font-family:'Sora',sans-serif;font-weight:800;color:var(--navy);font-size:1rem;display:flex;align-items:center;gap:8px;}
+.logo .dot{width:8px;height:8px;border-radius:50%;background:var(--coral);}
+.hint{font-size:.78rem;color:var(--soft);background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:20px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="loginView" class="active">
+    <div style="text-align:center;margin-bottom:28px;">
+      <div class="logo" style="justify-content:center;margin-bottom:8px;"><span class="dot"></span>DCC Painel Admin</div>
+      <p class="sub" style="margin:0;">Entre com sua conta de administrador</p>
+    </div>
+    <div class="card">
+      <form id="loginForm">
+        <label>E-mail<input type="email" id="loginEmail" required placeholder="seu@email.com"></label>
+        <label>Senha<input type="password" id="loginPassword" required placeholder="••••••"></label>
+        <p class="error" id="loginError"></p>
+        <button class="btn btn-dark" type="submit" style="width:100%;justify-content:center;">Entrar no painel</button>
+      </form>
+    </div>
+    <p class="hint">Este painel é exclusivo para administradores do clube. Os parceiros cadastrados aqui aparecem automaticamente no site.</p>
+  </div>
+
+  <div id="adminView">
+    <div class="topbar">
+      <div>
+        <h1>Painel do Clube</h1>
+        <p class="sub" id="welcomeMsg"></p>
+      </div>
+      <button class="btn btn-outline" id="logoutBtn">Sair</button>
+    </div>
+
+    <div class="card">
+      <h3 style="font-family:'Sora',sans-serif;color:var(--navy);margin-bottom:16px;font-size:1rem;">➕ Adicionar parceiro</h3>
+      <form id="partnerForm">
+        <div class="form-row">
+          <label>Categoria
+            <select id="pCat">
+              <option>Alimentação</option>
+              <option>Saúde</option>
+              <option>Autocuidado</option>
+              <option>Cuidados Pet</option>
+              <option>Serviços</option>
+              <option>Lazer</option>
+              <option>Educação</option>
+              <option>Moda</option>
+              <option>Outros</option>
+            </select>
+          </label>
+          <label>Desconto (ex: -15%)<input type="text" id="pTag" placeholder="-15%" required></label>
+        </div>
+        <label>Nome do negócio<input type="text" id="pName" placeholder="Ex: Farmácia São João" required></label>
+        <label>Descrição da oferta<input type="text" id="pDesc" placeholder="Ex: Desconto em medicamentos e perfumaria" required></label>
+        <p class="error" id="partnerError"></p>
+        <button class="btn btn-coral" type="submit">Salvar parceiro</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3 style="font-family:'Sora',sans-serif;color:var(--navy);margin-bottom:12px;font-size:1rem;">📋 Parceiros cadastrados</h3>
+      <div id="partnersList"><p class="sub">Carregando...</p></div>
+    </div>
+  </div>
+
+</div>
+<script>
+const CONFIG = {
+  supabaseUrl: "https://xmwokmzhjabqulclnuiz.supabase.co",
+  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhtd29rbXpoamFicXVsY2xudWl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyNjYxNzUsImV4cCI6MjA5Nzg0MjE3NX0.vNPzxMry71J1NLF5FxUVBS_zDzZncDktOq1oOqbd7BQ",
+  adminEmail: "ricardodcc875@gmail.com"
+};
+
+const supabase = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey);
+const loginView = document.getElementById('loginView');
+const adminView = document.getElementById('adminView');
+
+function showLogin(){ loginView.classList.add('active'); adminView.classList.remove('active'); }
+function showAdmin(email){ loginView.classList.remove('active'); adminView.classList.add('active'); document.getElementById('welcomeMsg').textContent = 'Logado como '+email; loadPartners(); }
+
+document.getElementById('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  document.getElementById('loginError').textContent = '';
+  const {data, error} = await supabase.auth.signInWithPassword({email, password});
+  if(error){ document.getElementById('loginError').textContent = 'E-mail ou senha incorretos.'; return; }
+  if(data.user.email !== CONFIG.adminEmail){ document.getElementById('loginError').textContent = 'Esta conta não tem acesso ao painel.'; await supabase.auth.signOut(); return; }
+  showAdmin(data.user.email);
+});
+
+document.getElementById('logoutBtn').addEventListener('click', async () => { await supabase.auth.signOut(); showLogin(); });
+
+document.getElementById('partnerForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  document.getElementById('partnerError').textContent = '';
+  const {error} = await supabase.from('partners').insert({
+    cat: document.getElementById('pCat').value,
+    name: document.getElementById('pName').value,
+    description: document.getElementById('pDesc').value,
+    tag: document.getElementById('pTag').value
+  });
+  if(error){ document.getElementById('partnerError').textContent = 'Erro: '+error.message; return; }
+  document.getElementById('partnerForm').reset();
+  loadPartners();
+});
+
+async function loadPartners(){
+  const {data, error} = await supabase.from('partners').select('*').order('created_at', {ascending:false});
+  const el = document.getElementById('partnersList');
+  if(error || !data || data.length === 0){ el.innerHTML = '<p class="sub">Nenhum parceiro cadastrado ainda.</p>'; return; }
+  el.innerHTML = data.map(p => '<div class="partner-row"><div class="info"><span>'+p.cat+'</span><strong>'+p.name+'</strong><p>'+p.description+'</p><span class="tag">'+p.tag+'</span></div><button class="btn-danger" data-id="'+p.id+'">Remover</button></div>').join('');
+  el.querySelectorAll('button[data-id]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if(!confirm('Remover '+btn.closest('.partner-row').querySelector('strong').textContent+'?')) return;
+      await supabase.from('partners').delete().eq('id', btn.dataset.id);
+      loadPartners();
+    });
+  });
+}
+
+supabase.auth.getSession().then(({data}) => {
+  if(data.session && data.session.user.email === CONFIG.adminEmail){ showAdmin(data.session.user.email); }
+});
+</script>
+</body>
+</html>
+
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px;}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(250,247,241,0.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.logo{font-family:var(--display);font-weight:800;font-size:1rem;color:var(--navy);display:flex;align-items:center;gap:8px;}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--coral);}
+.topbar-actions{display:flex;gap:8px;align-items:center;}
+.btn{font-family:var(--display);font-weight:700;font-size:.85rem;padding:11px 20px;border-radius:999px;transition:transform .18s ease,box-shadow .18s ease;display:inline-flex;align-items:center;gap:7px;cursor:pointer;border:none;white-space:nowrap;}
+.btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line);}
+.btn-ghost:hover{border-color:var(--navy);background:rgba(11,31,58,.04);}
+.btn-dark{background:var(--navy);color:#fff;box-shadow:0 6px 20px -8px rgba(11,31,58,.5);}
+.btn-dark:hover{transform:translateY(-2px);}
+.btn-coral{background:var(--coral);color:#fff;box-shadow:0 6px 20px -8px rgba(255,107,74,.5);}
+.btn-coral:hover{transform:translateY(-2px);}
+.btn-gold{background:var(--gold);color:#fff;}
+.btn-gold:hover{transform:translateY(-2px);}
+.btn-outline-coral{background:transparent;color:var(--coral);border:1.5px solid var(--coral);}
+.btn-outline-coral:hover{background:rgba(255,107,74,.06);}
+.hero{position:relative;padding:52px 0 44px;background:radial-gradient(120% 90% at 50% -10%,rgba(23,138,138,.10),transparent 60%),var(--cream);}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--river);text-transform:uppercase;font-weight:600;display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;}
+.eyebrow::before{content:"";width:18px;height:1px;background:var(--river);}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.1rem,7vw,3.2rem);line-height:1.05;color:var(--navy);letter-spacing:-.01em;max-width:11ch;}
+.hero h1 em{font-style:normal;color:var(--coral);}
+.hero p.lead{margin-top:16px;max-width:38ch;color:var(--ink-soft);font-size:1.05rem;line-height:1.55;}
+.hero-ctas{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;}
+.card-stage{margin-top:40px;display:flex;justify-content:center;perspective:1000px;}
+.vcard{width:min(320px,86vw);aspect-ratio:1.586/1;border-radius:18px;position:relative;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 55%,var(--navy) 100%);box-shadow:0 30px 60px -20px rgba(11,31,58,.55);color:#fff;overflow:hidden;transform:rotate3d(1,-1,0,8deg);transition:transform .4s ease;}
+.card-stage:hover .vcard{transform:rotate3d(1,-1,0,2deg) scale(1.02);}
+.vcard::before{content:"";position:absolute;left:-10%;bottom:-30%;width:130%;height:80%;background:repeating-linear-gradient(100deg,transparent 0 18px,rgba(23,138,138,.18) 18px 20px);transform:rotate(-6deg);opacity:.7;}
+.vcard::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.18),transparent);animation:shine 4.5s ease-in-out infinite;}
+@keyframes shine{0%{left:-60%;}45%{left:130%;}100%{left:130%;}}
+.vcard-inner{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:20px 22px;}
+.vcard-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.vcard-brand{font-family:var(--display);font-weight:800;font-size:1rem;}
+.vcard-tier{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;color:var(--gold-soft);border:1px solid rgba(228,199,102,.5);padding:3px 8px;border-radius:999px;}
+.vcard-chip{width:34px;height:24px;border-radius:5px;background:linear-gradient(135deg,var(--gold-soft),var(--gold));margin-top:10px;}
+.vcard-number{font-family:var(--mono);font-size:1rem;letter-spacing:.18em;color:#fff;opacity:.9;}
+.vcard-bottom{display:flex;justify-content:space-between;align-items:flex-end;}
+.vcard-name{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:rgba(255,255,255,.75);text-transform:uppercase;}
+.vcard-since{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.55);}
+.search-row{margin-top:34px;}
+.search-box{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:13px 18px;max-width:560px;margin:0 auto;box-shadow:0 10px 30px -20px rgba(11,31,58,.3);}
+.search-box:focus-within{border-color:var(--river);}
+.search-box input{flex:1;border:none;outline:none;font-size:1rem;font-family:var(--body);background:transparent;color:var(--ink);}
+.search-box input::placeholder{color:#9aa3b0;}
+.counter-strip{margin-top:24px;display:flex;justify-content:center;gap:6px;align-items:baseline;font-family:var(--mono);color:var(--navy);}
+.counter-strip .num{font-size:1.5rem;font-weight:700;color:var(--coral);}
+.counter-strip .label{font-size:.85rem;color:var(--ink-soft);}
+section{padding:64px 0;}
+.sec-head{margin-bottom:28px;}
+.sec-eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--coral);text-transform:uppercase;font-weight:600;margin-bottom:8px;display:block;}
+.sec-head h2{font-family:var(--display);font-weight:800;color:var(--navy);font-size:clamp(1.5rem,4vw,2rem);letter-spacing:-.01em;}
+.sec-head p{color:var(--ink-soft);margin-top:8px;max-width:46ch;}
+.cat-scroll{display:flex;gap:18px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x proximity;-ms-overflow-style:none;scrollbar-width:none;}
+.cat-scroll::-webkit-scrollbar{display:none;}
+.cat-pill{flex:none;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;gap:10px;width:88px;cursor:pointer;}
+.cat-pill:hover .cat-photo{transform:scale(1.06);}
+.cat-photo{width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid #fff;box-shadow:0 4px 16px -8px rgba(11,31,58,.22);transition:transform .2s;position:relative;background:var(--line);}
+.cat-photo img{width:100%;height:100%;object-fit:cover;}
+.cat-photo .cat-overlay{position:absolute;inset:0;border-radius:50%;background:linear-gradient(160deg,transparent,rgba(11,31,58,.15));}
+.cat-label{font-family:var(--display);font-size:.78rem;font-weight:700;color:var(--navy);text-align:center;line-height:1.2;}
+.banner-wrap{margin-top:28px;border-radius:20px;overflow:hidden;cursor:pointer;}
+.banner-track{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+.bcard{flex:none;width:100%;height:168px;display:flex;align-items:center;padding:0 28px;position:relative;overflow:hidden;border-radius:20px;}
+.bcard .bc-deco{position:absolute;right:-30px;bottom:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.1);}
+.bcard .bc-deco2{position:absolute;right:60px;top:-40px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07);}
+.bcard .bc-text{position:relative;z-index:2;max-width:70%;}
+.bcard .bc-tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-bottom:6px;display:block;}
+.bcard .bc-text h3{font-family:var(--display);font-weight:800;font-size:1.1rem;line-height:1.2;}
+.bcard .bc-text p{font-size:.8rem;margin-top:5px;opacity:.85;max-width:30ch;line-height:1.4;}
+.bcard .bc-btn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-family:var(--display);font-size:.78rem;font-weight:700;padding:8px 16px;border-radius:999px;}
+.banner-dots{display:flex;gap:6px;justify-content:center;margin-top:10px;}
+.banner-dots button{width:7px;height:7px;border-radius:50%;background:var(--line);transition:background .3s,width .3s,border-radius .3s;padding:0;}
+.banner-dots button.active{background:var(--coral);width:22px;border-radius:4px;}
+.partners-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.partner-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s;}
+.partner-card:hover{transform:translateY(-2px);box-shadow:0 14px 30px -16px rgba(11,31,58,.25);}
+.partner-tag{position:absolute;top:14px;right:14px;background:var(--coral);color:#fff;font-family:var(--mono);font-size:.7rem;font-weight:600;padding:4px 9px;border-radius:999px;}
+.partner-cat{font-size:.72rem;color:var(--river);font-weight:600;text-transform:uppercase;letter-spacing:.06em;}
+.partner-card h4{font-family:var(--display);font-size:1.05rem;color:var(--navy);margin-top:6px;font-weight:700;}
+.partner-card p{font-size:.85rem;color:var(--ink-soft);margin-top:6px;line-height:1.4;}
+.partner-cta{margin-top:14px;}
+.steps{display:flex;flex-direction:column;gap:0;}
+.step{display:flex;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);}
+.step:last-child{border-bottom:none;}
+.step-num{font-family:var(--mono);font-size:.85rem;color:var(--gold);font-weight:700;flex:none;width:34px;}
+.step h3{font-family:var(--display);font-size:1.05rem;color:var(--navy);font-weight:700;}
+.step p{font-size:.9rem;color:var(--ink-soft);margin-top:4px;max-width:46ch;}
+.plans-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
+.plan-card{background:#fff;border:2px solid var(--line);border-radius:var(--radius);padding:22px 20px;position:relative;}
+.plan-card.featured{border-color:var(--coral);background:linear-gradient(160deg,rgba(255,107,74,.04),#fff);}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--coral);color:#fff;font-family:var(--mono);font-size:.65rem;font-weight:700;padding:4px 12px;border-radius:999px;white-space:nowrap;}
+.plan-name{font-family:var(--display);font-weight:800;font-size:1rem;color:var(--navy);}
+.plan-price{font-family:var(--display);font-weight:800;font-size:1.6rem;color:var(--navy);margin-top:8px;}
+.plan-price span{font-size:.85rem;font-weight:600;color:var(--ink-soft);}
+.plan-desc{font-size:.8rem;color:var(--ink-soft);margin-top:6px;line-height:1.45;}
+.plan-items{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:6px;}
+.plan-items li{font-size:.8rem;color:var(--ink-soft);display:flex;align-items:flex-start;gap:7px;}
+.plan-items li::before{content:"✓";color:var(--river);font-weight:700;flex:none;margin-top:1px;}
+.plan-card .btn{width:100%;justify-content:center;margin-top:18px;}
+.cta-business{background:var(--navy);border-radius:28px;margin:0 20px;padding:46px 28px;text-align:center;position:relative;overflow:hidden;}
+.cta-business::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 0%,rgba(201,162,39,.18),transparent 70%);}
+.cta-business h2{position:relative;z-index:1;font-family:var(--display);font-weight:800;color:#fff;font-size:clamp(1.4rem,4.5vw,2rem);max-width:20ch;margin:0 auto;}
+.cta-business p{position:relative;z-index:1;color:rgba(255,255,255,.7);margin-top:12px;max-width:42ch;margin-inline:auto;}
+.cta-btns{position:relative;z-index:1;display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap;}
+footer{padding:40px 0 60px;border-top:1px solid var(--line);}
+footer .wrap{display:flex;flex-direction:column;gap:6px;}
+footer .logo{margin-bottom:6px;}
+footer p{font-size:.82rem;color:var(--ink-soft);}
+/* MODAL LOGIN */
+.modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(11,31,58,.55);display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:22px;width:min(380px,100%);padding:30px 26px;position:relative;}
+.modal-close{position:absolute;top:16px;right:18px;font-size:1.4rem;color:var(--ink-soft);line-height:1;background:none;border:none;cursor:pointer;}
+.modal-tabs{display:flex;gap:8px;margin-bottom:22px;background:var(--cream);border-radius:999px;padding:4px;}
+.modal-tabs .tab{flex:1;padding:9px 0;border-radius:999px;font-weight:600;font-size:.88rem;color:var(--ink-soft);transition:background .15s,color .15s;}
+.modal-tabs .tab.active{background:var(--navy);color:#fff;}
+.auth-form{display:flex;flex-direction:column;gap:14px;}
+.auth-form label{font-size:.82rem;color:var(--ink-soft);font-weight:600;display:flex;flex-direction:column;gap:6px;}
+.auth-form input{border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:.95rem;font-family:var(--body);color:var(--ink);outline:none;}
+.auth-form input:focus{border-color:var(--river);}
+.auth-form .btn{width:100%;justify-content:center;}
+.auth-error{color:var(--coral);font-size:.82rem;min-height:1em;}
+@media(min-width:760px){
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;}
+.card-stage{margin-top:0;}
+.search-row,.counter-strip{grid-column:1/-1;}
+.partners-grid{grid-template-columns:repeat(4,1fr);}
+.steps{flex-direction:row;gap:30px;}
+.step{flex-direction:column;border-bottom:none;padding:0;gap:10px;}
+.plans-grid{grid-template-columns:repeat(4,1fr);}
+.cat-pill{width:100px;}
+.cat-photo{width:90px;height:90px;}
+.bcard{height:180px;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span><span id="brandTopName">SUA MARCA</span> Vantagens</div>
+    <div class="topbar-actions">
+      <a class="btn btn-ghost" href="#parceiros">Parceiros</a>
+      <button class="btn btn-dark" id="authTrigger">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        Entrar
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="modal-overlay" id="authOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-tabs">
+      <button class="tab active" data-tab="login">Entrar</button>
+      <button class="tab" data-tab="signup">Criar conta</button>
+    </div>
+    <form id="loginForm" class="auth-form">
+      <label>E-mail<input type="email" id="loginEmail" required></label>
+      <label>Senha<input type="password" id="loginPassword" required></label>
+      <p class="auth-error" id="loginError"></p>
+      <button class="btn btn-dark" type="submit">Entrar</button>
+    </form>
+    <form id="signupForm" class="auth-form" style="display:none">
+      <label>Nome<input type="text" id="signupName" required></label>
+      <label>E-mail<input type="email" id="signupEmail" required></label>
+      <label>Senha (mín. 6 caracteres)<input type="password" id="signupPassword" minlength="6" required></label>
+      <p class="auth-error" id="signupError"></p>
+      <button class="btn btn-coral" type="submit">Criar conta gratuita</button>
+    </form>
+    <p style="font-size:.78rem;color:var(--ink-soft);text-align:center;margin-top:14px;" id="authHint"></p>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Clube de vantagens · <span id="brandCity">Vale do São Francisco</span></span>
+      <h1>Seu cartão. Seus descontos. <em>Sua cidade.</em></h1>
+      <p class="lead">Descontos de verdade em comércios que você já frequenta — sem mensalidade escondida, sem letra miúda.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-coral" href="#parceiros">Ver parceiros</a>
+        <a class="btn btn-ghost" href="#como-funciona">Como funciona</a>
+      </div>
+      <div class="search-row">
+        <div class="search-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9aa3b0" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Busque uma categoria...">
+        </div>
+      </div>
+      <div class="counter-strip">
+        <span class="num" id="counterValue">0</span>
+        <span class="label">economizados pelos membros este mês</span>
+      </div>
+    </div>
+    <div class="card-stage">
+      <div class="vcard">
+        <div class="vcard-inner">
+          <div class="vcard-top">
+            <div class="vcard-brand" id="brandCardName">SUA MARCA</div>
+            <span class="vcard-tier">OURO</span>
+          </div>
+          <div>
+            <div class="vcard-chip"></div>
+            <div class="vcard-number" id="vcardNumber" style="margin-top:14px;">•••• •••• •••• 4821</div>
+          </div>
+          <div class="vcard-bottom">
+            <span class="vcard-name" id="vcardMemberName">MEMBRO TITULAR</span>
+            <span class="vcard-since" id="vcardSince">desde 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="categorias">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Explorar</span>
+      <h2>Descontos pra cada parte da sua rotina</h2>
+      <p>Do restaurante à farmácia, do pet ao salão — tudo perto de você.</p>
+    </div>
+    <div class="cat-scroll" id="catScroll"></div>
+    <div class="banner-wrap" id="bannerWrap"></div>
+    <div class="banner-dots" id="bannerDots"></div>
+  </div>
+</section>
+
+<section id="parceiros">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Quem participa</span>
+      <h2>Parceiros em destaque</h2>
+      <p>Negócios locais com desconto real pra quem tem o cartão.</p>
+    </div>
+    <div class="partners-grid" id="partnersGrid"></div>
+  </div>
+</section>
+
+<section id="como-funciona">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-eyebrow">Passo a passo</span><h2>Como funciona</h2></div>
+    <div class="steps">
+      <div class="step"><span class="step-num">01</span><div><h3>Ative seu cartão digital</h3><p>Cadastro em menos de um minuto, sem cartão físico.</p></div></div>
+      <div class="step"><span class="step-num">02</span><div><h3>Encontre um parceiro próximo</h3><p>Filtre por categoria e veja o desconto antes de sair.</p></div></div>
+      <div class="step"><span class="step-num">03</span><div><h3>Mostre o cartão e economize</h3><p>Apresente o cartão digital — desconto aplicado na hora.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="planos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Planos</span>
+      <h2>Escolha o seu plano</h2>
+      <p>Para empresas que querem ter seu próprio clube de vantagens.</p>
+    </div>
+    <div class="plans-grid" id="plansGrid"></div>
+  </div>
+</section>
+
+<section>
+  <div class="cta-business">
+    <h2>Quer um clube de vantagens com a sua marca?</h2>
+    <p>Identidade visual própria, seus parceiros, seu domínio. Demonstração gratuita.</p>
+    <div class="cta-btns">
+      <a class="btn btn-coral" id="ctaWhatsMain" href="#" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.852L.057 23.5l5.787-1.519A11.956 11.956 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.854 0-3.6-.483-5.12-1.33l-.368-.215-3.434.9.918-3.352-.237-.386A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Falar no WhatsApp
+      </a>
+      <a class="btn btn-gold" href="#planos">Ver planos</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span><span id="brandFooterName">SUA MARCA</span> Vantagens</div>
+    <p>Plataforma de clube de vantagens — descontos locais pra quem vive aqui.</p>
+    <p>© 2026 — Desenvolvido por <strong>Digital Chevalier Card</strong> · (75) 99177-1095</p>
+  </div>
+</footer>
+
+<script>
+const CONFIG = {
+  brand: "SUA MARCA",
+  city: "Vale do São Francisco",
+  whatsapp: "5575991771095",
+  monthlySavings: 18450,
+  supabaseUrl: "https://xmwokmzhjabqulclnuiz.supabase.co",
+  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhtd29rbXpoamFicXVsY2xudWl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyNjYxNzUsImV4cCI6MjA5Nzg0MjE3NX0.vNPzxMry71J1NLF5FxUVBS_zDzZncDktOq1oOqbd7BQ"
+};
+
+document.getElementById('brandTopName').textContent = CONFIG.brand;
+document.getElementById('brandCardName').textContent = CONFIG.brand;
+document.getElementById('brandFooterName').textContent = CONFIG.brand;
+document.getElementById('brandCity').textContent = CONFIG.city;
+
+function waLink(msg){ return 'https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(msg); }
+document.getElementById('ctaWhatsMain').href = waLink('Olá! Quero saber mais sobre o Clube de Vantagens.');
+
+const supabase = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey);
+
+// CATEGORIAS
+const categories = [
+  {label:"Comer bem",img:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop&auto=format"},
+  {label:"Fome de cupom",img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&h=200&fit=crop&auto=format"},
+  {label:"Cuidados pet",img:"https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=200&h=200&fit=crop&auto=format"},
+  {label:"Pé na estrada",img:"https://images.unsplash.com/photo-1501854140801-50d01698950b?w=200&h=200&fit=crop&auto=format"},
+  {label:"Foco na carreira",img:"https://images.unsplash.com/photo-1513258496099-48168024aec0?w=200&h=200&fit=crop&auto=format"},
+  {label:"Autocuidado",img:"https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=200&h=200&fit=crop&auto=format"},
+  {label:"Pra se divertir",img:"https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=200&h=200&fit=crop&auto=format"},
+  {label:"Achadinhos",img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=200&h=200&fit=crop&auto=format"},
+  {label:"Sextou",img:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=200&h=200&fit=crop&auto=format"}
+];
+document.getElementById('catScroll').innerHTML = categories.map(c=>'<div class="cat-pill"><div class="cat-photo"><img src="'+c.img+'" alt="'+c.label+'" loading="lazy"><div class="cat-overlay"></div></div><span class="cat-label">'+c.label+'</span></div>').join('');
+
+// BANNERS
+const banners = [
+  {bg:"linear-gradient(120deg,#178A8A,#0B1F3A)",tag:"Saúde",title:"Descontos em +25.000 farmácias",sub:"R$ 102 milhões economizados em 12 meses.",ctaLabel:"Ver parceiros",ctaHref:"#parceiros",ctaBg:"#FF6B4A",ctaColor:"#fff"},
+  {bg:"linear-gradient(120deg,#C9A227,#142D52)",tag:"Novidade",title:"Crie agora o seu clube de vantagens",sub:"Sua marca, seus parceiros, seu domínio.",ctaLabel:"WhatsApp",ctaHref:waLink('Quero criar meu clube!'),ctaBg:"#fff",ctaColor:"#142D52"},
+  {bg:"linear-gradient(120deg,#FF6B4A,#0B1F3A)",tag:"São Francisco",title:"Sua marca em destaque, sempre!",sub:"Atraia, retenha e surpreenda seus clientes.",ctaLabel:"Ver planos",ctaHref:"#planos",ctaBg:"#C9A227",ctaColor:"#fff"}
+];
+const bw=document.getElementById('bannerWrap'),bd=document.getElementById('bannerDots');
+let cur=0,autoT=null;
+bw.innerHTML='<div class="banner-track" id="bannerTrack">'+banners.map(b=>'<div class="bcard" style="background:'+b.bg+';color:#fff;"><div class="bc-deco"></div><div class="bc-deco2"></div><div class="bc-text"><span class="bc-tag">'+b.tag+'</span><h3>'+b.title+'</h3><p>'+b.sub+'</p><a class="bc-btn" href="'+b.ctaHref+'" style="background:'+b.ctaBg+';color:'+b.ctaColor+';">'+b.ctaLabel+'</a></div></div>').join('')+'</div>';
+bd.innerHTML=banners.map((_,i)=>'<button class="'+(i===0?'active':'')+'" data-i="'+i+'"></button>').join('');
+function goBanner(n){cur=(n+banners.length)%banners.length;document.getElementById('bannerTrack').style.transform='translateX(-'+cur*100+'%)';document.querySelectorAll('.banner-dots button').forEach((d,i)=>d.classList.toggle('active',i===cur));}
+function startAuto(){if(autoT)clearInterval(autoT);autoT=setInterval(()=>goBanner(cur+1),4500);}
+document.querySelectorAll('.banner-dots button').forEach(d=>d.addEventListener('click',()=>{goBanner(Number(d.dataset.i));startAuto();}));
+bw.addEventListener('mouseenter',()=>clearInterval(autoT));
+bw.addEventListener('mouseleave',startAuto);
+startAuto();
+
+// PARCEIROS — carrega do Supabase
+const exemploPartners=[
+  {cat:"Saúde",name:"Farmácia São Francisco",description:"Desconto em medicamentos e produtos de higiene",tag:"-18%"},
+  {cat:"Sabor Local",name:"Restaurante Sabor da Terra",description:"Almoço executivo de seg a sex",tag:"-15%"},
+  {cat:"Autocuidado",name:"Espaço Bella Estética",description:"Limpeza de pele e massagem",tag:"-20%"},
+  {cat:"Cuidados Pet",name:"Vet & Cia Clínica Veterinária",description:"Consulta e vacinas com desconto",tag:"-10%"},
+  {cat:"Serviços",name:"Oficina Central Auto Center",description:"Revisão completa e troca de óleo",tag:"-12%"}
+];
+function renderPartners(list){
+  document.getElementById('partnersGrid').innerHTML=list.map(p=>'<div class="partner-card"><span class="partner-tag">'+p.tag+'</span><span class="partner-cat">'+p.cat+'</span><h4>'+p.name+'</h4><p>'+p.description+'</p><div class="partner-cta"><a class="btn btn-outline-coral" style="font-size:.78rem;padding:8px 16px;" href="'+waLink('Olá! Vi o desconto de '+p.name+' no Clube de Vantagens.')+'" target="_blank" rel="noopener">Ver oferta</a></div></div>').join('');
+}
+async function loadPartners(){
+  try{
+    const {data,error}=await supabase.from('partners').select('*').order('created_at',{ascending:true});
+    if(!error&&data&&data.length>0){renderPartners(data);return;}
+  }catch(e){}
+  renderPartners(exemploPartners);
+}
+loadPartners();
+
+// PLANOS
+const plans=[
+  {name:"Básico",price:"R$ 149",per:"/mês",desc:"Ideal pra começar",featured:false,items:["1 banner no carrossel","Até 30 parceiros","Página personalizada","Suporte WhatsApp"]},
+  {name:"Padrão",price:"R$ 249",per:"/mês",desc:"Mais visibilidade",featured:false,items:["2 banners no carrossel","Até 80 parceiros","Domínio personalizado","Relatório mensal"]},
+  {name:"Pro",price:"R$ 399",per:"/mês",desc:"Para clubes maiores",featured:true,items:["3 banners no carrossel","Até 200 parceiros","Painel de gestão","Suporte prioritário"]},
+  {name:"Master",price:"Sob consulta",per:"",desc:"Clube empresarial",featured:false,items:["Banners ilimitados","Parceiros ilimitados","Marca 100% sua","Gestor dedicado"]}
+];
+document.getElementById('plansGrid').innerHTML=plans.map(p=>'<div class="plan-card'+(p.featured?' featured':'')+'">'+( p.featured?'<div class="plan-badge">Mais popular</div>':'' )+'<div class="plan-name">'+p.name+'</div><div class="plan-price">'+p.price+'<span>'+p.per+'</span></div><div class="plan-desc">'+p.desc+'</div><ul class="plan-items">'+p.items.map(i=>'<li>'+i+'</li>').join('')+'</ul><a class="btn '+(p.featured?'btn-coral':'btn-ghost')+'" href="'+waLink('Olá! Quero o plano '+p.name+' do Clube de Vantagens.')+'" target="_blank">'+( p.featured?'Quero este plano':'Saber mais' )+'</a></div>').join('');
+
+// CONTADOR
+const counterEl=document.getElementById('counterValue');
+let counted=false;
+function formatBRL(n){return"R$ "+n.toLocaleString('pt-BR');}
+function runCounter(){if(counted)return;counted=true;const d=1200,t0=performance.now();function tick(t){const p=Math.min((t-t0)/d,1),e=1-Math.pow(1-p,3);counterEl.textContent=formatBRL(Math.floor(e*CONFIG.monthlySavings));if(p<1)requestAnimationFrame(tick);}requestAnimationFrame(tick);}
+new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)runCounter();});},{threshold:.5}).observe(counterEl);
+
+// BUSCA
+document.getElementById('searchInput').addEventListener('input',function(){const q=this.value.toLowerCase();document.querySelectorAll('.cat-pill').forEach(el=>{el.style.opacity=el.querySelector('.cat-label').textContent.toLowerCase().includes(q)||q===''?'1':'.25';});});
+
+// AUTH
+const authOverlay=document.getElementById('authOverlay');
+const authTrigger=document.getElementById('authTrigger');
+document.getElementById('modalClose').addEventListener('click',()=>authOverlay.classList.remove('open'));
+authOverlay.addEventListener('click',e=>{if(e.target===authOverlay)authOverlay.classList.remove('open');});
+authTrigger.addEventListener('click',()=>{
+  if(authTrigger.dataset.logged==='true'){supabase.auth.signOut();authTrigger.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>Entrar';authTrigger.dataset.logged='false';document.getElementById('vcardMemberName').textContent='MEMBRO TITULAR';document.getElementById('vcardNumber').textContent='•••• •••• •••• 4821';document.getElementById('vcardSince').textContent='desde 2026';}
+  else{authOverlay.classList.add('open');}
+});
+document.querySelectorAll('.modal-tabs .tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.modal-tabs .tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');
+    const s=tab.dataset.tab==='signup';
+    document.getElementById('loginForm').style.display=s?'none':'flex';
+    document.getElementById('signupForm').style.display=s?'flex':'none';
+  });
+});
+document.getElementById('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const{data,error}=await supabase.auth.signInWithPassword({email:document.getElementById('loginEmail').value,password:document.getElementById('loginPassword').value});
+  if(error){document.getElementById('loginError').textContent='E-mail ou senha incorretos.';return;}
+  const{data:m}=await supabase.from('members').select('*').eq('id',data.user.id).single();
+  if(m){authTrigger.textContent='Sair ('+m.name.split(' ')[0]+')';authTrigger.dataset.logged='true';document.getElementById('vcardMemberName').textContent=m.name.toUpperCase();document.getElementById('vcardNumber').textContent='•••• •••• •••• '+m.card_number;document.getElementById('vcardSince').textContent='desde '+new Date(m.created_at).getFullYear();}
+  authOverlay.classList.remove('open');
+});
+document.getElementById('signupForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const name=document.getElementById('signupName').value;
+  const{data,error}=await supabase.auth.signUp({email:document.getElementById('signupEmail').value,password:document.getElementById('signupPassword').value});
+  if(error){document.getElementById('signupError').textContent=error.message;return;}
+  if(data.user){
+    const card=String(Math.floor(1000+Math.random()*9000));
+    await supabase.from('members').insert({id:data.user.id,name,card_number:card});
+    authTrigger.textContent='Sair ('+name.split(' ')[0]+')';authTrigger.dataset.logged='true';
+    document.getElementById('vcardMemberName').textContent=name.toUpperCase();
+    document.getElementById('vcardNumber').textContent='•••• •••• •••• '+card;
+    document.getElementById('vcardSince').textContent='desde 2026';
+    authOverlay.classList.remove('open');
+  }else{document.getElementById('authHint').textContent='Confirme seu e-mail antes de entrar.';}
+});
+supabase.auth.getSession().then(({data})=>{
+  if(data.session){
+    supabase.from('members').select('*').eq('id',data.session.user.id).single().then(({data:m})=>{
+      if(m){authTrigger.textContent='Sair ('+m.name.split(' ')[0]+')';authTrigger.dataset.logged='true';document.getElementById('vcardMemberName').textContent=m.name.toUpperCase();document.getElementById('vcardNumber').textContent='•••• •••• •••• '+m.card_number;document.getElementById('vcardSince').textContent='desde '+new Date(m.created_at).getFullYear();}
+    });
+  }
+});
+</script>
+</body>
+</html>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clube de Vantagens — Sua Marca</title>
 <meta name="description" content="Descontos reais em parceiros locais do Vale do São Francisco e Paulo Afonso.">
